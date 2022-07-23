@@ -1,20 +1,21 @@
+import { UserDocument } from "./user.model";
 import bcrypt from "bcrypt";
 import config from "config";
 import mongoose from "mongoose";
-export interface UserDocument extends mongoose.Document {
-    email: string;
-    name: string;
-    password: string;
+export interface SchemaDocument extends mongoose.Document {
+    user: UserDocument["_id"];
+    valid: boolean;
+    userAgent: String,
     createdAt: Date;
     updatedAt: Date;
-    comparePassword(candidatePassword: string): Promise<boolean>
 }
 
 const sessionSchema = new mongoose.Schema(
     {
-        email: {type:String, required: true, unique:true},
-        name: { type:String, required: true},
+        user: {type:mongoose.Schema.Types.ObjectId, ref:'User'},
+        valid: { type:Boolean, default: true},
         password: {type:String, required: true},
+        userAgent: {type: String},
     },
     {
         timestamps: true,
